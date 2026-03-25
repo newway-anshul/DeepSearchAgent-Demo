@@ -1,6 +1,6 @@
 """
-LLM调用模块
-支持多种大语言模型的统一接口
+LLM invocation module
+Unified interface supporting multiple large language models
 """
 
 from .base import BaseLLM
