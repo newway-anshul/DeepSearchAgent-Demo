@@ -1,6 +1,6 @@
 """
-搜索工具实现
-支持多种搜索引擎，主要使用Tavily搜索
+Search tool implementation.
+Supports multiple search engines, primarily using Tavily search.
 """
 
 import os
@@ -11,14 +11,14 @@ from tavily import TavilyClient
 
 @dataclass
 class SearchResult:
-    """搜索结果数据类"""
+    """Search result data model."""
     title: str
     url: str
     content: str
     score: Optional[float] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典格式"""
+        """Convert to dictionary format."""
         return {
             "title": self.title,
             "url": self.url,
@@ -28,38 +28,38 @@ class SearchResult:
 
 
 class TavilySearch:
-    """Tavily搜索客户端封装"""
+    """Wrapper for the Tavily search client."""
     
     def __init__(self, api_key: Optional[str] = None):
         """
-        初始化Tavily搜索客户端
+        Initialize the Tavily search client.
         
         Args:
-            api_key: Tavily API密钥，如果不提供则从环境变量读取
+            api_key: Tavily API key. If not provided, read from environment variable.
         """
         if api_key is None:
             api_key = os.getenv("TAVILY_API_KEY")
             if not api_key:
-                raise ValueError("Tavily API Key未找到！请设置TAVILY_API_KEY环境变量或在初始化时提供")
+                raise ValueError("Tavily API key not found! Set TAVILY_API_KEY or provide it during initialization.")
         
         self.client = TavilyClient(api_key=api_key)
     
     def search(self, query: str, max_results: int = 5, include_raw_content: bool = True, 
                timeout: int = 240) -> List[SearchResult]:
         """
-        执行搜索
+        Execute a search.
         
         Args:
-            query: 搜索查询
-            max_results: 最大结果数量
-            include_raw_content: 是否包含原始内容
-            timeout: 超时时间（秒）
+            query: Search query.
+            max_results: Maximum number of results.
+            include_raw_content: Whether to include raw content.
+            timeout: Timeout in seconds.
             
         Returns:
-            搜索结果列表
+            List of search results.
         """
         try:
-            # 调用Tavily API
+            # Call Tavily API
             response = self.client.search(
                 query=query,
                 max_results=max_results,
@@ -67,7 +67,7 @@ class TavilySearch:
                 timeout=timeout
             )
             
-            # 解析结果
+            # Parse results
             results = []
             if 'results' in response:
                 for item in response['results']:
@@ -82,16 +82,16 @@ class TavilySearch:
             return results
             
         except Exception as e:
-            print(f"搜索错误: {str(e)}")
+            print(f"Search error: {str(e)}")
             return []
 
 
-# 全局搜索客户端实例
+# Global search client instance
 _tavily_client = None
 
 
 def get_tavily_client() -> TavilySearch:
-    """获取全局Tavily客户端实例"""
+    """Get the global Tavily client instance."""
     global _tavily_client
     if _tavily_client is None:
         _tavily_client = TavilySearch()
@@ -101,67 +101,67 @@ def get_tavily_client() -> TavilySearch:
 def tavily_search(query: str, max_results: int = 5, include_raw_content: bool = True, 
                   timeout: int = 240, api_key: Optional[str] = None) -> List[Dict[str, Any]]:
     """
-    便捷的Tavily搜索函数
+    Convenient Tavily search function.
     
     Args:
-        query: 搜索查询
-        max_results: 最大结果数量
-        include_raw_content: 是否包含原始内容
-        timeout: 超时时间（秒）
-        api_key: Tavily API密钥，如果提供则使用此密钥，否则使用全局客户端
+        query: Search query.
+        max_results: Maximum number of results.
+        include_raw_content: Whether to include raw content.
+        timeout: Timeout in seconds.
+        api_key: Tavily API key. If provided, use this key; otherwise use the global client.
         
     Returns:
-        搜索结果字典列表，保持与原始经验贴兼容的格式
+        List of result dictionaries, kept in a format compatible with the original implementation.
     """
     try:
         if api_key:
-            # 使用提供的API密钥创建临时客户端
+            # Create a temporary client with the provided API key
             client = TavilySearch(api_key)
         else:
-            # 使用全局客户端
+            # Use the global client
             client = get_tavily_client()
         
         results = client.search(query, max_results, include_raw_content, timeout)
         
-        # 转换为字典格式以保持兼容性
+        # Convert to dictionary format for compatibility
         return [result.to_dict() for result in results]
         
     except Exception as e:
-        print(f"搜索功能调用错误: {str(e)}")
+        print(f"Search function call error: {str(e)}")
         return []
 
 
-def test_search(query: str = "人工智能发展趋势 2025", max_results: int = 3):
+def test_search(query: str = "AI development trends 2025", max_results: int = 3):
     """
-    测试搜索功能
+    Test search functionality.
     
     Args:
-        query: 测试查询
-        max_results: 最大结果数量
+        query: Test query.
+        max_results: Maximum number of results.
     """
-    print(f"\n=== 测试Tavily搜索功能 ===")
-    print(f"搜索查询: {query}")
-    print(f"最大结果数: {max_results}")
+    print(f"\n=== Testing Tavily Search ===")
+    print(f"Search query: {query}")
+    print(f"Maximum results: {max_results}")
     
     try:
         results = tavily_search(query, max_results=max_results)
         
         if results:
-            print(f"\n找到 {len(results)} 个结果:")
+            print(f"\nFound {len(results)} results:")
             for i, result in enumerate(results, 1):
-                print(f"\n结果 {i}:")
-                print(f"标题: {result['title']}")
-                print(f"链接: {result['url']}")
-                print(f"内容摘要: {result['content'][:200]}...")
+                print(f"\nResult {i}:")
+                print(f"Title: {result['title']}")
+                print(f"URL: {result['url']}")
+                print(f"Content summary: {result['content'][:200]}...")
                 if result.get('score'):
-                    print(f"相关度评分: {result['score']}")
+                    print(f"Relevance score: {result['score']}")
         else:
-            print("未找到搜索结果")
+            print("No search results found")
             
     except Exception as e:
-        print(f"搜索测试失败: {str(e)}")
+        print(f"Search test failed: {str(e)}")
 
 
 if __name__ == "__main__":
-    # 运行测试
+    # Run test
     test_search()
