@@ -1,6 +1,6 @@
 """
 Deep Search Agent
-一个无框架的深度搜索AI代理实现
+An Implementation of a Framework-Agnostic Depth-First Search AI Agent
 """
 
 from .agent import DeepSearchAgent, create_agent
