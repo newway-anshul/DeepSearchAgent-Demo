@@ -57,6 +57,7 @@ tmp/
 Thumbs.db
 
 # Project-specific
+config.py
 reports/
 custom_reports/
 streamlit_reports/
