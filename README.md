@@ -7,11 +7,11 @@
 
 A **framework-free** deep search AI agent implementation that generates high-quality research reports through multi-round searching and reflection.
 
-<img src="https://github.com/666ghj/DeepSearchAgent-Demo/blob/main/img/1.png?raw=true" width="70%">
+<img src="./img/1.png?raw=true" width="70%">
 
-<img src="https://github.com/666ghj/DeepSearchAgent-Demo/blob/main/img/2.png?raw=true" width="70%">
+<img src="./img/2.png?raw=true" width="70%">
 
-<img src="https://github.com/666ghj/DeepSearchAgent-Demo/blob/main/img/3.png?raw=true" width="70%">
+<img src=".img/3.png?raw=true" width="70%">
 
 ## Features
 
